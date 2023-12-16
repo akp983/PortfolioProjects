@@ -1,0 +1,1207 @@
+Sub macro1()
+
+Call cleaningOldWeekData
+Call dumpSheetCopyPaste
+Call formulasDraggedInWorkingCells
+Call duplicateSAPCodesCheck
+Call displayDumpFormation
+
+End Sub
+
+Sub macro2()
+
+Call compiledFilterationFinal
+
+End Sub
+
+Sub macro3()
+
+Call CompiledToFinalData
+
+End Sub
+
+Sub cleaningOldWeekData()
+    
+Workbooks("Cleansing.xlsb").Sheets("Working_DD").Activate
+    Sheets("Working_DD").AutoFilter.ShowAllData
+    Rows("5:5").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete Shift:=xlUp
+    Range("A1").Select
+    
+Workbooks("Cleansing.xlsb").Sheets("Working_Disty").Activate
+    Sheets("Working_Disty").AutoFilter.ShowAllData
+    Rows("5:5").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete Shift:=xlUp
+    Range("A1").Select
+    
+Workbooks("Cleansing.xlsb").Sheets("Working_RR").Activate
+    Sheets("Working_RR").AutoFilter.ShowAllData
+    Rows("5:5").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete Shift:=xlUp
+    Range("A1").Select
+
+Workbooks("Cleansing.xlsb").Sheets("Working_EPOS").Activate
+    Sheets("Working_EPOS").AutoFilter.ShowAllData
+    Rows("5:5").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete Shift:=xlUp
+    Range("A1").Select
+
+Workbooks("Cleansing.xlsb").Sheets("Working_MCS").Activate
+    Sheets("Working_MCS").AutoFilter.ShowAllData
+    Rows("5:5").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete Shift:=xlUp
+    Range("A1").Select
+
+Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+    Sheets("Compiled_All5").AutoFilter.ShowAllData
+    Rows("1:1").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete Shift:=xlUp
+    Selection.End(xlUp).Select
+
+Workbooks("Cleansing.xlsb").Sheets("Final_Data").Activate
+Rows("2:2").Select
+Range(Selection, Selection.End(xlDown)).Select
+Selection.Delete Shift:=xlUp
+Selection.End(xlUp).Select
+
+Workbooks("Cleansing.xlsb").Sheets("CM_").Activate
+Columns("C:Q").Select
+Selection.Clear
+Columns("V:BR").Select
+Selection.Clear
+Range("C1").Select
+
+Workbooks("Cleansing.xlsb").Sheets("Display_Working").Activate
+Columns("A:Q").Select
+Selection.Clear
+Range("A1").Select
+   
+Workbooks("Cleansing.xlsb").Sheets("Working_DD").Activate
+
+ActiveWorkbook.Save
+
+End Sub
+
+Sub dumpSheetCopyPaste()
+
+Workbooks.Open "D:\Aakash Pandey\GT_PSI\Dump\CM.xlsb"
+
+Dim CmWs As Worksheet
+Set CmWs = Sheets(1)
+CmWs.Name = "CM"
+
+Workbooks("CM.xlsb").Sheets("CM").Activate
+Sheets("CM").AutoFilter.ShowAllData
+Range("A:O").Select
+Selection.Copy
+Workbooks("Cleansing.xlsb").Sheets("CM_").Activate
+Range("C:Q").Select
+ActiveSheet.Paste
+Application.CutCopyMode = 0
+Workbooks("CM.xlsb").Sheets("RAW").Activate
+Sheets("RAW").ShowAllData
+Range("A:AW").Select
+Selection.Copy
+Workbooks("Cleansing.xlsb").Sheets("CM_").Activate
+Range("V:BR").Select
+ActiveSheet.Paste
+Application.CutCopyMode = 0
+
+Columns("AA:AA").Select
+Selection.TextToColumns Destination:=Range("AA1"), DataType:=xlDelimited, _
+        TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=True, _
+        Semicolon:=False, Comma:=False, Space:=False, Other:=False, FieldInfo _
+        :=Array(1, 1), TrailingMinusNumbers:=True
+    Range("AA1").Select
+
+Workbooks("CM.xlsb").Close SaveChanges:=True
+Workbooks("Cleansing.xlsb").Worksheets("CM_").Calculate
+    
+Workbooks.Open "D:\Aakash Pandey\GT_PSI\Dump\DD.xls"
+    Workbooks("DD.xls").Sheets("DD").Activate
+    Range("S:S").Select
+    Selection.Delete
+    Range("A:AQ").Select
+    Selection.Copy
+    Workbooks("Cleansing.xlsb").Sheets("Working_DD").Activate
+    Range("B:AR").Select
+    ActiveSheet.Paste
+    Application.CutCopyMode = 0
+    Workbooks("DD.xls").Close SaveChanges:=False
+
+Workbooks.Open "D:\Aakash Pandey\GT_PSI\Dump\Disty.xls"
+    Workbooks("Disty.xls").Sheets("Disty").Activate
+    Range("S:S").Select
+    Selection.Delete
+    Range("A:AQ").Select
+    Selection.Copy
+    Workbooks("Cleansing.xlsb").Sheets("Working_Disty").Activate
+    Range("B:AR").Select
+    ActiveSheet.Paste
+    Application.CutCopyMode = 0
+    Workbooks("Disty.xls").Close SaveChanges:=False
+
+
+Workbooks.Open "D:\Aakash Pandey\GT_PSI\Dump\RR.xls"
+    Workbooks("RR.xls").Sheets("RR").Activate
+    Range("S:S").Select
+    Selection.Delete
+    Range("A:AQ").Select
+    Selection.Copy
+    Workbooks("Cleansing.xlsb").Sheets("Working_RR").Activate
+    Range("B:AR").Select
+    ActiveSheet.Paste
+    Application.CutCopyMode = 0
+    Workbooks("RR.xls").Close SaveChanges:=False
+
+
+Workbooks.Open "D:\Aakash Pandey\GT_PSI\Dump\EPOS.xls"
+    Workbooks("EPOS.xls").Sheets("EPOS").Activate
+    Range("S:S").Select
+    Selection.Delete
+    Range("A:AQ").Select
+    Selection.Copy
+    Workbooks("Cleansing.xlsb").Sheets("Working_EPOS").Activate
+    Range("B:AR").Select
+    ActiveSheet.Paste
+    Application.CutCopyMode = 0
+    Workbooks("EPOS.xls").Close SaveChanges:=False
+
+
+Workbooks.Open "D:\Aakash Pandey\GT_PSI\Dump\MCS.xls"
+    Workbooks("MCS.xls").Sheets("MCS").Activate
+    Range("S:S").Select
+    Selection.Delete
+    Range("A:AQ").Select
+    Selection.Copy
+    Workbooks("Cleansing.xlsb").Sheets("Working_MCS").Activate
+    Range("B:AR").Select
+    ActiveSheet.Paste
+    Application.CutCopyMode = 0
+    Workbooks("MCS.xls").Close SaveChanges:=False
+
+Workbooks("Cleansing.xlsb").Sheets("Working_DD").Activate
+
+ActiveWorkbook.Save
+
+End Sub
+
+Sub formulasDraggedInWorkingCells()
+
+Workbooks("Cleansing.xlsb").Sheets("Working_DD").Activate
+
+    Range("B1").Select
+    Selection.End(xlDown).Select
+    ActiveCell.Offset(0, -1).Select
+    Range(Selection, Selection.End(xlUp)).Select
+    Selection.FillDown
+    
+    Range("AR1").Select
+    Selection.End(xlDown).Select
+    ActiveCell.Offset(0, 1).Select
+    Range(Selection, ActiveCell.Offset(0, 19)).Select
+    
+    Range(Selection, Selection.End(xlUp)).Select
+    Selection.FillDown
+    ActiveSheet.Calculate
+    Rows("5").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Application.CutCopyMode = 0
+    
+    Range("A:BL").AutoFilter Field:=64, Criteria1:="To Keep"
+    Range("A1:BL1").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy
+    
+    Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+    ActiveSheet.Cells(1, 1).Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Application.CutCopyMode = 0
+    
+Workbooks("Cleansing.xlsb").Sheets("Working_Disty").Activate
+
+    Range("B1").Select
+    Selection.End(xlDown).Select
+    ActiveCell.Offset(0, -1).Select
+    Range(Selection, Selection.End(xlUp)).Select
+    Selection.FillDown
+    
+    Range("AR1").Select
+    Selection.End(xlDown).Select
+    ActiveCell.Offset(0, 1).Select
+    Range(Selection, ActiveCell.Offset(0, 19)).Select
+    
+    Range(Selection, Selection.End(xlUp)).Select
+    Selection.FillDown
+    ActiveSheet.Calculate
+    Rows("5").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Application.CutCopyMode = 0
+    
+        
+    Range("A:BL").AutoFilter Field:=64, Criteria1:="To Keep"
+    Range("A1").Select
+    
+    Selection.End(xlDown).Select
+    LastRwno = Selection.Row
+    
+    Range("A2:BL" & LastRwno).Select
+    Selection.SpecialCells(xlCellTypeVisible).Select
+    
+    Selection.Copy
+    
+    Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+    ActiveSheet.Cells(1, 1).End(xlDown).Offset(1, 0).Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Application.CutCopyMode = 0
+
+
+Workbooks("Cleansing.xlsb").Sheets("Working_RR").Activate
+
+    Range("B1").Select
+    Selection.End(xlDown).Select
+    ActiveCell.Offset(0, -1).Select
+    Range(Selection, Selection.End(xlUp)).Select
+    Selection.FillDown
+    
+    Range("AR1").Select
+    Selection.End(xlDown).Select
+    ActiveCell.Offset(0, 1).Select
+    Range(Selection, ActiveCell.Offset(0, 19)).Select
+    
+    Range(Selection, Selection.End(xlUp)).Select
+    Selection.FillDown
+    ActiveSheet.Calculate
+    Rows("5").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Application.CutCopyMode = 0
+    
+    Range("A:BL").AutoFilter Field:=64, Criteria1:="To Keep"
+    Range("A1").Select
+    
+    Selection.End(xlDown).Select
+    LastRwno = Selection.Row
+    
+    Range("A2:BL" & LastRwno).Select
+    Selection.SpecialCells(xlCellTypeVisible).Select
+    
+    Selection.Copy
+    
+    Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+    ActiveSheet.Cells(1, 1).End(xlDown).Offset(1, 0).Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Application.CutCopyMode = 0
+
+
+Workbooks("Cleansing.xlsb").Sheets("Working_EPOS").Activate
+
+    Range("B1").Select
+    Selection.End(xlDown).Select
+    ActiveCell.Offset(0, -1).Select
+    Range(Selection, Selection.End(xlUp)).Select
+    Selection.FillDown
+    
+    Range("AR1").Select
+    Selection.End(xlDown).Select
+    ActiveCell.Offset(0, 1).Select
+    Range(Selection, ActiveCell.Offset(0, 19)).Select
+    
+    Range(Selection, Selection.End(xlUp)).Select
+    Selection.FillDown
+    ActiveSheet.Calculate
+    Rows("5").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Application.CutCopyMode = 0
+    
+    Range("A:BL").AutoFilter Field:=64, Criteria1:="To Keep"
+    Range("A1").Select
+    
+    Selection.End(xlDown).Select
+    LastRwno = Selection.Row
+    
+    Range("A2:BL" & LastRwno).Select
+    Selection.SpecialCells(xlCellTypeVisible).Select
+    
+    Selection.Copy
+    
+    Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+    ActiveSheet.Cells(1, 1).End(xlDown).Offset(1, 0).Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Application.CutCopyMode = 0
+
+
+Workbooks("Cleansing.xlsb").Sheets("Working_MCS").Activate
+
+    Range("B1").Select
+    Selection.End(xlDown).Select
+    ActiveCell.Offset(0, -1).Select
+    Range(Selection, Selection.End(xlUp)).Select
+    Selection.FillDown
+    
+    Range("AR1").Select
+    Selection.End(xlDown).Select
+    ActiveCell.Offset(0, 1).Select
+    Range(Selection, ActiveCell.Offset(0, 19)).Select
+    
+    Range(Selection, Selection.End(xlUp)).Select
+    Selection.FillDown
+    ActiveSheet.Calculate
+    Rows("5").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Application.CutCopyMode = 0
+    Range("A:BL").AutoFilter Field:=64, Criteria1:="To Keep"
+    Range("A1").Select
+    
+    Selection.End(xlDown).Select
+    LastRwno = Selection.Row
+    
+    Range("A2:BL" & LastRwno).Select
+    Selection.SpecialCells(xlCellTypeVisible).Select
+    
+    Selection.Copy
+    
+    Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+    ActiveSheet.Cells(1, 1).End(xlDown).Offset(1, 0).Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Application.CutCopyMode = 0
+
+Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+Range("AT:BD").Select
+Selection.Delete
+
+Range("AU:AW").Select
+Selection.Delete
+
+Range("AW:AX").Select
+Selection.Delete
+
+ActiveWorkbook.Save
+
+End Sub
+
+Sub duplicateSAPCodesCheck()
+
+' Duplicates_Pivot Refresh
+Workbooks("Cleansing.xlsb").Sheets("Working_Duplicate").Activate
+    
+    Range("G3").Select
+    Selection.AutoFilter
+    
+    ActiveSheet.PivotTables("PivotTable1").PivotCache.Refresh
+    
+    'PSILLW = Sheets("Backend").Range("DO4").Value
+    PSILW = Range("A1").Value
+    ActiveSheet.PivotTables("PivotTable1").PivotFields("PSILW"). _
+    Orientation = xlHidden
+    
+    With ActiveSheet.PivotTables("PivotTable1").PivotFields(PSILW)
+        .Orientation = xlDataField
+        .Function = xlSum
+        .Name = "PSILW"
+    End With
+    
+    Range("E3").Select
+    Selection.AutoFilter
+  
+    ActiveSheet.Range("E:H").AutoFilter Field:=5, Criteria1:="2"
+    Range("G3").Select
+    ActiveSheet.Range("E:H").AutoFilter Field:=7, Criteria1:="#N/A"
+    Range("H3").Select
+    ActiveSheet.Range("E:H").AutoFilter Field:=8, Criteria1:="#N/A"
+    Range("F3").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy
+    Sheets("Backend").Select
+    Range("AL1").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Range("AL1").Select
+    Sheets("Working_Duplicate").Select
+    Application.CutCopyMode = False
+
+
+End Sub
+
+Sub compiledFilterationFinal()
+
+Workbooks("Cleansing.xlsb").Sheets("Backend").Activate
+Range("CS1:DI4").Select
+Selection.Copy
+
+Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+Range("AW1").Select
+ActiveCell.PasteSpecial Paste:=xlPasteAll
+
+Range("AV1").Select
+Selection.End(xlDown).Select
+ActiveCell.Offset(0, 1).Select
+
+Range(Selection, ActiveCell.Offset(0, 16)).Select
+Range(Selection, Selection.End(xlUp)).Select
+Selection.FillDown
+ActiveSheet.Calculate
+
+MsgBox "Please update model mapper", vbInformation, "Model Mapper Check"
+
+'After updating model mapper
+Rows("5").Select
+Range(Selection, Selection.End(xlDown)).Select
+Selection.Copy
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+    :=False, Transpose:=False
+Application.CutCopyMode = 0
+
+Range("A:BM").AutoFilter Field:=48, Criteria1:="EOL"
+
+Range("AV1").Select
+    
+    Selection.End(xlDown).Select
+    LastRwno = Selection.Row
+    
+    Range("T2:T" & LastRwno).Select
+    Selection.SpecialCells(xlCellTypeVisible).Select
+    
+    Selection.Value = 0
+    
+    Range("W2:W" & LastRwno).Select
+    Selection.SpecialCells(xlCellTypeVisible).Select
+    
+    Selection.Value = 0
+
+    Range("Y2:Y" & LastRwno).Select
+    Selection.SpecialCells(xlCellTypeVisible).Select
+    
+    Selection.Value = 0
+
+    Range("AB2:AB" & LastRwno).Select
+    Selection.SpecialCells(xlCellTypeVisible).Select
+    
+    Selection.Value = 0
+    Range("AD2:AD" & LastRwno).Select
+    Selection.SpecialCells(xlCellTypeVisible).Select
+    
+    Selection.Value = 0
+    Range("AG2:AG" & LastRwno).Select
+    Selection.SpecialCells(xlCellTypeVisible).Select
+    
+    Selection.Value = 0
+    Range("AI2:AI" & LastRwno).Select
+    Selection.SpecialCells(xlCellTypeVisible).Select
+    
+    Selection.Value = 0
+    Range("AL2:AL" & LastRwno).Select
+    Selection.SpecialCells(xlCellTypeVisible).Select
+    
+    Selection.Value = 0
+    Range("AN2:AN" & LastRwno).Select
+    Selection.SpecialCells(xlCellTypeVisible).Select
+    
+    Selection.Value = 0
+    Range("AQ2:AQ" & LastRwno).Select
+    Selection.SpecialCells(xlCellTypeVisible).Select
+    
+    Selection.Value = 0
+
+Range("A1").Select
+
+'Range("A:BM").AutoFilter.ShowAllData
+
+Range("A1").Select
+
+Sheets("Compiled_All5").AutoFilter.ShowAllData
+    
+ActiveWorkbook.Save
+    
+
+End Sub
+
+Sub displayDumpFormation()
+
+Workbooks.Open "D:\Aakash Pandey\GT_PSI\Dump\Display.csv"
+Range("A:Q").Select
+Selection.Copy
+Workbooks("Cleansing.xlsb").Sheets("Display_Working").Activate
+
+ActiveSheet.Range("A1").Select
+
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+Application.CutCopyMode = 0
+
+Workbooks("Display.csv").Close SaveChanges:=False
+
+'Formatting
+
+Workbooks("Cleansing.xlsb").Sheets("Display_Working").Activate
+
+    Range("A2:Q2").Select
+    Selection.Delete Shift:=xlUp
+    
+    Columns("F:F").Select
+    Selection.Replace What:="A.C", Replacement:="SAC", LookAt:=xlPart, _
+        SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
+        ReplaceFormat:=False
+    Selection.Replace What:="TV", Replacement:="PANEL", LookAt:=xlPart, _
+        SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
+        ReplaceFormat:=False
+    Columns("I:I").Select
+    Selection.Replace What:="Z-AIR-", Replacement:="", LookAt:=xlPart, _
+        SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
+        ReplaceFormat:=False
+        
+        Selection.Replace What:="Z-AIR", Replacement:="", LookAt:=xlPart, _
+        SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
+        ReplaceFormat:=False
+    
+    Columns("N:N").Select
+    Selection.Replace What:="SDP", Replacement:="BS", LookAt:=xlPart, _
+        SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
+        ReplaceFormat:=False
+
+'With Application
+'    .Calculation = xlCalculationManual
+'    .ScreenUpdating = False
+'    .EnableEvents = False
+'End With
+
+ActiveSheet.PivotTables("PivotTable3").PivotCache.Refresh
+
+'Dim startCell As Range, lastRow As Long, lastColumn As Long
+'Dim ws, wsPivot As Worksheet
+'Dim pvtName As String, rangePivot As Range, strNewData As String
+
+'Set ws = ThisWorkbook.Worksheets("Display_Working")
+'Set wsPivot = "PivotTable3"
+'Set startCell = ws.Range("A1")
+
+'lastRow = ws.Cells(ws.Rows.Count, startCell.Column).End(xlUp).Row
+'lastColumn = ws.Cells(startCell.Row + 1, ws.Columns.Count).End(xlToLeft).Column
+
+'Set rangePivot = ws.Range(startCell, ws.Cells(lastRow, lastColumn))
+
+'strNewData = ws.Name & "!" & rangePivot.Address(ReferenceStyle:=xlR1C1)
+
+'With Application
+'    .Calculation = xlCalculationAutomatic
+'    .ScreenUpdating = True
+'    .EnableEvents = True
+'End With
+ 
+End Sub
+
+Sub CompiledToFinalData()
+
+Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+
+Range("A1").Select
+Selection.End(xlDown).Select
+    LastRwno = Selection.Row
+
+Range("A1").Select
+Range("A1:BM" & LastRwno).Select
+        
+ActiveSheet.Range("A1:BM" & LastRwno).AutoFilter Field:=52, Criteria1:= _
+        "Non_Duplicate"
+ActiveSheet.Range("A1:BM" & LastRwno).AutoFilter Field:=56, Criteria1:=Array _
+        ("AC", "AV", "HA"), Operator:=xlFilterValues
+        
+'Zone
+Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+Range("BA2:BA" & LastRwno).Select
+Selection.SpecialCells(xlCellTypeVisible).Select
+Selection.Copy
+
+Workbooks("Cleansing.xlsb").Sheets("Final_Data").Activate
+Range("A2").Select
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+Application.CutCopyMode = 0
+
+'Region
+Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+Range("BB2:BB" & LastRwno).Select
+Selection.SpecialCells(xlCellTypeVisible).Select
+Selection.Copy
+
+Workbooks("Cleansing.xlsb").Sheets("Final_Data").Activate
+Range("B2").Select
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+Application.CutCopyMode = 0
+    
+'Branch
+Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+Range("BC2:BC" & LastRwno).Select
+Selection.SpecialCells(xlCellTypeVisible).Select
+Selection.Copy
+
+Workbooks("Cleansing.xlsb").Sheets("Final_Data").Activate
+Range("C2").Select
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+Application.CutCopyMode = 0
+
+'SAP to INV
+Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+Range("F2:J" & LastRwno).Select
+Selection.SpecialCells(xlCellTypeVisible).Select
+Selection.Copy
+
+Workbooks("Cleansing.xlsb").Sheets("Final_Data").Activate
+Range("D2").Select
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+Application.CutCopyMode = 0
+
+'Channel Status
+Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+Range("AY2:AY" & LastRwno).Select
+Selection.SpecialCells(xlCellTypeVisible).Select
+Selection.Copy
+
+Workbooks("Cleansing.xlsb").Sheets("Final_Data").Activate
+Range("E2").Select
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+Application.CutCopyMode = 0
+
+
+'P1 to P3_2
+Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+Range("BD2:BL" & LastRwno).Select
+Selection.SpecialCells(xlCellTypeVisible).Select
+Selection.Copy
+
+Workbooks("Cleansing.xlsb").Sheets("Final_Data").Activate
+Range("I2").Select
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+Application.CutCopyMode = 0
+
+'Channel name & Model
+Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+Range("O2:P" & LastRwno).Select
+Selection.SpecialCells(xlCellTypeVisible).Select
+Selection.Copy
+
+Workbooks("Cleansing.xlsb").Sheets("Final_Data").Activate
+Range("R2").Select
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    
+'Channel Type
+Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+Range("AX2:AX" & LastRwno).Select
+Selection.SpecialCells(xlCellTypeVisible).Select
+Selection.Copy
+
+Workbooks("Cleansing.xlsb").Sheets("Final_Data").Activate
+Range("T2").Select
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    
+'Values
+Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+Range("T1:AR" & LastRwno).Select
+Selection.SpecialCells(xlCellTypeVisible).Select
+Selection.Copy
+
+Workbooks("Cleansing.xlsb").Sheets("Final_Data").Activate
+Range("U1").Select
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    
+'EOL
+Workbooks("Cleansing.xlsb").Sheets("Compiled_All5").Activate
+Range("AV2:AV" & LastRwno).Select
+Selection.SpecialCells(xlCellTypeVisible).Select
+Selection.Copy
+
+Workbooks("Cleansing.xlsb").Sheets("Final_Data").Activate
+Range("AT2").Select
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    
+Workbooks("Cleansing.xlsb").Sheets("Final_Data").Activate
+
+Range("A1").Select
+Selection.End(xlDown).Select
+LastRwno = Selection.Row
+
+Range("A1").Select
+Range("A1:AU" & LastRwno).Select
+        
+ActiveSheet.Range("A1:AU" & LastRwno).AutoFilter Field:=4, Criteria1:= _
+        "6148483"
+
+Range("C2:C" & LastRwno).Select
+Selection.SpecialCells(xlCellTypeVisible).Select
+
+Selection.Value = "KOLHAPUR"
+    
+
+ActiveSheet.Range("A1:AU" & LastRwno).AutoFilter Field:=4, Criteria1:= _
+        "4888459"
+
+Range("C2:C" & LastRwno).Select
+Selection.SpecialCells(xlCellTypeVisible).Select
+
+Selection.Value = "BHOPAL"
+
+ActiveSheet.Range("A1:AU" & LastRwno).AutoFilter Field:=4, Criteria1:= _
+        "4888910"
+
+Range("C2:C" & LastRwno).Select
+Selection.SpecialCells(xlCellTypeVisible).Select
+
+Selection.Value = "BHOPAL"
+
+Range("A1").Select
+
+Sheets("Final_Data").AutoFilter.ShowAllData
+
+ActiveWorkbook.Save
+    
+End Sub
+
+Sub PSIMainWorkingMacro()
+
+ScreenUpdating = False
+Displayalert = False
+
+Dim sPath As String
+Dim sFile As String
+Dim wb As Workbook
+
+sPath = "D:\Aakash Pandey\GT_PSI\2023_w49\"
+sFile = sPath & "PSI_Main_Working.xlsb"
+
+
+Set wb = Workbooks.Open(sFile)
+
+Workbooks("PSI_Main_Working.xlsb").Sheets("Raw_Data").Activate
+
+Rows("5:5").Select
+Range(Selection, Selection.End(xlDown)).Select
+Selection.Delete Shift:=xlUp
+Range("A1").Select
+
+Workbooks("PSI_Main_Working.xlsb").Sheets("INV").Activate
+
+Range("A5").Select
+Range(Selection, Selection.Offset(0, 1)).Select
+Range(Selection, Selection.End(xlDown)).Select
+Selection.Delete Shift:=xlUp
+Range("A1").Select
+
+Workbooks("PSI_Main_Working.xlsb").Sheets("Disp").Activate
+
+Rows("5:5").Select
+Range(Selection, Selection.End(xlDown)).Select
+Selection.Delete Shift:=xlUp
+Range("A1").Select
+
+Workbooks("PSI_Main_Working.xlsb").Sheets("Displ_Inv").Activate
+
+Range("D5").Select
+Range(Selection, Selection.End(xlDown)).Select
+Selection.Delete Shift:=xlUp
+Range("A1").Select
+
+Workbooks("Cleansing.xlsb").Sheets("Final_Data").Activate
+Range("D2:T2").Select
+Range(Selection, Selection.End(xlDown)).Select
+Selection.Copy
+
+Workbooks("PSI_Main_Working.xlsb").Sheets("Raw_Data").Activate
+Range("D2").Select
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+Application.CutCopyMode = 0
+
+Workbooks("Cleansing.xlsb").Sheets("Final_Data").Activate
+Range("U1:AS1").Select
+Range(Selection, Selection.End(xlDown)).Select
+Selection.Copy
+
+Workbooks("PSI_Main_Working.xlsb").Sheets("Raw_Data").Activate
+Range("V1").Select
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+Application.CutCopyMode = 0
+
+MsgBox "Please check Region/Branch Mapper", vbInformation, "Region/Branch Check"
+
+
+Workbooks("PSI_Main_Working.xlsb").Sheets("Raw_Data").Activate
+Range("D1").End(xlDown).Select
+
+ActiveCell.Offset(0, -1).Select
+Range(Selection, ActiveCell.Offset(0, -2)).Select
+Range(Selection, Selection.End(xlUp)).Select
+Selection.FillDown
+
+Workbooks("PSI_Main_Working.xlsb").Sheets("Raw_Data").Activate
+Range("T1").End(xlDown).Select
+ActiveCell.Offset(0, 1).Select
+Range(Selection, Selection.End(xlUp)).Select
+Selection.FillDown
+
+Range("A1").Select
+
+Workbooks("PSI_Main_Working.xlsb").Sheets("INV").Activate
+ActiveSheet.PivotTables("PivotTable2").PivotCache.Refresh
+
+ActiveSheet.PivotTables("PivotTable2").PivotFields("New_Branch").Orientation = xlHidden
+ActiveSheet.PivotTables("PivotTable2").PivotFields("SAP_Code").Orientation = xlHidden
+ActiveSheet.PivotTables("PivotTable2").PivotFields("Short_Model").Orientation = xlHidden
+
+PSILW = Workbooks("Cleansing.xlsb").Worksheets("Working_Duplicate").Range("A1").Value
+
+ActiveSheet.PivotTables("PivotTable2").PivotFields("PSILW").Orientation = xlHidden
+    
+    With ActiveSheet.PivotTables("PivotTable2").PivotFields(PSILW)
+        .Orientation = xlDataField
+        .Function = xlSum
+        .Name = "PSILW"
+    End With
+
+    ActiveSheet.PivotTables("PivotTable2").PivotFields("MODEL_CD").AutoSort _
+        xlDescending, "PSILW", ActiveSheet.PivotTables("PivotTable2"). _
+        PivotColumnAxis.PivotLines(1), 1
+
+
+    With ActiveSheet.PivotTables("PivotTable2").PivotFields("New_Branch")
+        .Orientation = xlRowField
+        .Name = "New_Branch"
+        .Position = 1
+    End With
+    
+    With ActiveSheet.PivotTables("PivotTable2").PivotFields("SAP_Code")
+        .Orientation = xlRowField
+        .Name = "SAP_Code"
+        .Position = 2
+    End With
+    
+    With ActiveSheet.PivotTables("PivotTable2").PivotFields("Short_Model")
+        .Orientation = xlRowField
+        .Name = "Short_Model"
+        .Position = 3
+    End With
+
+Range("C1").End(xlDown).Select
+
+ActiveCell.Offset(0, -1).Select
+Range(Selection, ActiveCell.Offset(0, -1)).Select
+Range(Selection, Selection.End(xlUp)).Select
+Selection.FillDown
+
+Range("A1").Select
+
+Workbooks("Cleansing.xlsb").Sheets("Display_Working").Activate
+
+Range("T2:AA2").Select
+Range(Selection, Selection.End(xlDown)).Select
+Selection.Copy
+
+Workbooks("PSI_Main_Working.xlsb").Sheets("Disp").Activate
+Range("B2").Select
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+Application.CutCopyMode = 0
+
+Range("B1").End(xlDown).Select
+ActiveCell.Offset(0, -1).Select
+Range(Selection, Selection.End(xlUp)).Select
+Selection.FillDown
+
+Range("I1").End(xlDown).Select
+ActiveCell.Offset(0, 1).Select
+Range(Selection, Selection.Offset(0, 1)).Select
+Range(Selection, Selection.End(xlUp)).Select
+Selection.FillDown
+
+Range("A1").Select
+
+Workbooks("PSI_Main_Working.xlsb").Sheets("Displ_Inv").Activate
+
+ActiveSheet.PivotTables("PivotTable3").PivotCache.Refresh
+ActiveSheet.PivotTables("PivotTable4").PivotCache.Refresh
+
+Range("E3").End(xlDown).Select
+ActiveCell.Offset(0, -1).Select
+Range(Selection, Selection.End(xlUp)).Select
+Selection.FillDown
+
+Range("A1").Select
+
+MsgBox "Please check Average Sales Price", vbInformation, "ASP Check"
+
+Workbooks("PSI_Main_Working.xlsb").Sheets("Raw_Data").Activate
+
+Range("AT1").End(xlDown).Select
+ActiveCell.Offset(0, 1).Select
+Range(Selection, Selection.Offset(0, 10)).Select
+Range(Selection, Selection.End(xlUp)).Select
+Selection.FillDown
+
+Range("A1").Select
+
+ActiveWorkbook.Save
+
+End Sub
+
+Sub Customer_Master_Ref_Correction()
+
+MsgBox "Please check everything before updating Pivot table", vbInformation, "Main PSI Pivot Update"
+
+Workbooks("Cleansing.xlsb").Sheets("SAP_Branch_Mapper").Activate
+Range("B27").Select
+Range(Selection, Selection.End(xlDown)).Select
+Selection.ClearContents
+
+Columns("B:B").Select
+Selection.Replace What:="#REF", Replacement:="CM", LookAt:=xlPart, SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, ReplaceFormat:=False
+Range("A23").End(xlDown).Select
+ActiveCell.Offset(0, 1).Select
+Range(Selection, Selection.End(xlUp)).Select
+Selection.FillDown
+
+Workbooks("Cleansing.xlsb").Sheets("Backend").Activate
+Range("AP2").Select
+Range(Selection, Selection.End(xlDown)).Select
+Selection.Copy
+
+Workbooks("PSI_Main_Working.xlsb").Sheets("Raw_Data").Activate
+Range("AU1").Select
+
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks:=False, Transpose:=True
+Application.CutCopyMode = 0
+
+Workbooks("PSI_Main_Working.xlsb").Sheets("Pivot with Backwards WOS").Activate
+ActiveSheet.PivotTables("PivotTable1").PivotCache.Refresh
+
+ActiveWorkbook.Save
+
+
+End Sub
+
+Sub Final_Summary_Main_PSI_Working()
+
+Workbooks.Open "D:\Aakash Pandey\GT_PSI\Dump\Pivot_formulas.xlsx"
+Workbooks("Pivot_formulas.xlsx").Sheets("Formula_Sheet").Activate
+
+'Dim OldFormulaName1 As Range
+'Dim OldFormulaName2 As Range
+'Dim OldFormulaName3 As Range
+'Dim OldFormulaName4 As Range
+'Dim OldFormulaName5 As Range
+'Dim OldFormulaName6 As Range
+'Dim OldFormulaName7 As Range
+'Dim OldFormulaName8 As Range
+
+OldFormulaName1 = ActiveSheet.Range("C6").Value
+OldFormulaName2 = ActiveSheet.Range("C7").Value
+OldFormulaName3 = ActiveSheet.Range("C8").Value
+OldFormulaName4 = ActiveSheet.Range("C9").Value
+OldFormulaName5 = ActiveSheet.Range("C10").Value
+OldFormulaName6 = ActiveSheet.Range("C11").Value
+OldFormulaName7 = ActiveSheet.Range("C12").Value
+OldFormulaName8 = ActiveSheet.Range("C13").Value
+
+Workbooks("PSI_Main_Working.xlsb").Sheets("Raw_Data").Activate
+
+ActiveSheet.PivotTables("PivotTable1").CalculatedFields(OldFormulaName1).Delete
+ActiveSheet.PivotTables("PivotTable1").CalculatedFields(OldFormulaName2).Delete
+ActiveSheet.PivotTables("PivotTable1").CalculatedFields(OldFormulaName3).Delete
+ActiveSheet.PivotTables("PivotTable1").CalculatedFields(OldFormulaName4).Delete
+ActiveSheet.PivotTables("PivotTable1").CalculatedFields(OldFormulaName5).Delete
+ActiveSheet.PivotTables("PivotTable1").CalculatedFields(OldFormulaName6).Delete
+ActiveSheet.PivotTables("PivotTable1").CalculatedFields(OldFormulaName7).Delete
+ActiveSheet.PivotTables("PivotTable1").CalculatedFields(OldFormulaName8).Delete
+
+'Set OldFormulaName1 = Nothing
+'Set OldFormulaName2 = Nothing
+'Set OldFormulaName3 = Nothing
+'Set OldFormulaName4 = Nothing
+'Set OldFormulaName5 = Nothing
+'Set OldFormulaName6 = Nothing
+'Set OldFormulaName7 = Nothing
+'Set OldFormulaName8 = Nothing
+
+'Dim NewFormulaName1 As Range
+'Dim NewFormulaName2 As Range
+'Dim NewFormulaName3 As Range
+'Dim NewFormulaName4 As Range
+'Dim NewFormulaName5 As Range
+'Dim NewFormulaName6 As Range
+'Dim NewFormulaName7 As Range
+'Dim NewFormulaName8 As Range
+
+'Dim NewFormulaRange1 As Range
+'Dim NewFormulaRange2 As Range
+'Dim NewFormulaRange3 As Range
+'Dim NewFormulaRange4 As Range
+'Dim NewFormulaRange5 As Range
+'Dim NewFormulaRange6 As Range
+'Dim NewFormulaRange7 As Range
+'Dim NewFormulaRange8 As Range
+
+Workbooks("Pivot_formulas.xlsx").Sheets("Formula_Sheet").Activate
+
+NewFormulaName1 = ActiveSheet.Range("D6").Value
+NewFormulaName2 = ActiveSheet.Range("D7").Value
+NewFormulaName3 = ActiveSheet.Range("D8").Value
+NewFormulaName4 = ActiveSheet.Range("D9").Value
+NewFormulaName5 = ActiveSheet.Range("D10").Value
+NewFormulaName6 = ActiveSheet.Range("D11").Value
+NewFormulaName7 = ActiveSheet.Range("D12").Value
+NewFormulaName8 = ActiveSheet.Range("D13").Value
+
+NewFormulaRange1 = ActiveSheet.Range("E6").Value
+NewFormulaRange2 = ActiveSheet.Range("E7").Value
+NewFormulaRange3 = ActiveSheet.Range("E8").Value
+NewFormulaRange4 = ActiveSheet.Range("E9").Value
+NewFormulaRange5 = ActiveSheet.Range("E10").Value
+NewFormulaRange6 = ActiveSheet.Range("E11").Value
+NewFormulaRange7 = ActiveSheet.Range("E12").Value
+NewFormulaRange8 = ActiveSheet.Range("E13").Value
+
+Windows("PSI_Main_Working.xlsb").Activate
+Range("A3").Select
+ActiveSheet.PivotTables("PivotTable1").CalculatedFields.Add NewFormulaName1, NewFormulaRange1, True
+ActiveSheet.PivotTables("PivotTable1").CalculatedFields.Add NewFormulaName2, NewFormulaRange2, True
+ActiveSheet.PivotTables("PivotTable1").CalculatedFields.Add NewFormulaName3, NewFormulaRange3, True
+ActiveSheet.PivotTables("PivotTable1").CalculatedFields.Add NewFormulaName4, NewFormulaRange4, True
+ActiveSheet.PivotTables("PivotTable1").CalculatedFields.Add NewFormulaName5, NewFormulaRange5, True
+ActiveSheet.PivotTables("PivotTable1").CalculatedFields.Add NewFormulaName6, NewFormulaRange6, True
+ActiveSheet.PivotTables("PivotTable1").CalculatedFields.Add NewFormulaName7, NewFormulaRange7, True
+ActiveSheet.PivotTables("PivotTable1").CalculatedFields.Add NewFormulaName8, NewFormulaRange8, True
+
+'Set NewFormulaName1 = Nothing
+'Set NewFormulaName2 = Nothing
+'Set NewFormulaName3 = Nothing
+'Set NewFormulaName4 = Nothing
+'Set NewFormulaName5 = Nothing
+'Set NewFormulaName6 = Nothing
+'Set NewFormulaName7 = Nothing
+'Set NewFormulaName8 = Nothing
+
+'Set NewFormulaRange1 = Nothing
+'Set NewFormulaRange2 = Nothing
+'Set NewFormulaRange3 = Nothing
+'Set NewFormulaRange4 = Nothing
+'Set NewFormulaRange5 = Nothing
+'Set NewFormulaRange6 = Nothing
+'Set NewFormulaRange7 = Nothing
+'Set NewFormulaRange8 = Nothing
+
+
+End Sub
+
+Sub lastYearComparisonSheet()
+
+Workbooks.Open "D:\Aakash Pandey\GT_PSI\Dump\PSI_LY.xlsb"
+'Please change path accordingly
+Workbooks.Open "D:\Aakash Pandey\GT_PSI\Dump\LY_TY_PSI.xlsb"
+'Please change path accordingly
+Workbooks.Open "D:\Aakash Pandey\GT_PSI\2023_w34\Comparison_Data_Working.xlsb"
+
+Workbooks("LY_TY_PSI.xlsb").Sheets("Raw Data_LY").Activate
+Rows("5:5").Select
+Range(Selection, Selection.End(xlDown)).Select
+Selection.Delete Shift:=xlUp
+Range("A1").Select
+
+Workbooks("LY_TY_PSI.xlsb").Sheets("Raw Data_TY").Activate
+Rows("5:5").Select
+Range(Selection, Selection.End(xlDown)).Select
+Selection.Delete Shift:=xlUp
+Range("A1").Select
+
+Workbooks("PSI_LY.xlsb").Sheets("Raw Data").Activate
+
+Range("A1").Select
+Selection.End(xlDown).Select
+    LastRwno = Selection.Row
+
+Range("A1:AU" & LastRwno).Select
+Selection.SpecialCells(xlCellTypeVisible).Select
+Selection.Copy
+
+Workbooks("LY_TY_PSI.xlsb").Sheets("Raw Data_LY").Activate
+
+Range("A2").Select
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+Application.CutCopyMode = 0
+
+Workbooks("PSI_LY.xlsb").Sheets("Raw Data").Activate
+
+Range("AW1:AW" & LastRwno).Select
+'Selection.SpecialCells(xlCellTypeVisible).Select
+Selection.Copy
+
+Workbooks("LY_TY_PSI.xlsb").Sheets("Raw Data_LY").Activate
+
+Range("AV2").Select
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+Application.CutCopyMode = 0
+
+
+Workbooks("LY_TY_PSI.xlsb").Sheets("Snapshot_Pivot_LY").Activate
+
+ActiveSheet.PivotTables("PivotTable2").PivotCache.Refresh
+
+Workbooks.Open "D:\Aakash Pandey\GT_PSI\2023_w34\Archive\PSI_TY.xlsb"
+
+Workbooks("PSI_TY.xlsb").Sheets("Raw_Data").Activate
+
+Range("A1").Select
+Selection.End(xlDown).Select
+    LastRwno = Selection.Row
+
+Range("A1:AS" & LastRwno).Select
+Selection.SpecialCells(xlCellTypeVisible).Select
+Selection.Copy
+
+Workbooks("LY_TY_PSI.xlsb").Sheets("Raw Data_TY").Activate
+
+Range("A2").Select
+Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+Application.CutCopyMode = 0
+
+Workbooks("LY_TY_PSI.xlsb").Sheets("Snapshot_Pivot_TY").Activate
+
+ActiveSheet.PivotTables("PivotTable2").PivotCache.Refresh
+
+
+End Sub
